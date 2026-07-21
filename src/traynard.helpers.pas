@@ -290,6 +290,7 @@ begin
   Icon := TIcon.Create;
   try
     Icon.Handle := CopyIcon(HIcon);
+    if Icon.Handle = 0 then Exit(DefaultIndex);
     Result := AddIcon(Icon);
     Result := ImageList_ReplaceIcon(Handle, Result, Icon.Handle);
   finally

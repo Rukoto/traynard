@@ -344,13 +344,14 @@ end;
 
 function TWindow.GetIcon: HICON;
 begin
-  if FIcon = 0 then
+  if (FIcon = 0) and IsWindow(FHandle) then
   begin
     FIcon := HICON(SendMessageW(FHandle, WM_GETICON, ICON_BIG, 0));
     if FIcon = 0 then FIcon := HICON(SendMessageW(FHandle, WM_GETICON, ICON_SMALL2, 0));
     if FIcon = 0 then FIcon := HICON(GetClassLongPtrW(FHandle, GCLP_HICON));
     if FIcon = 0 then FIcon := HICON(GetClassLongPtrW(FHandle, GCLP_HICONSM));
   end;
+  if not IsWindow(FHandle) then Exit(0);
   Result := FIcon;
 end;
 
