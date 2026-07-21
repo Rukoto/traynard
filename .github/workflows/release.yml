@@ -109,6 +109,9 @@ jobs:
         shell: pwsh
         run: |
           $innoSetupPath = "C:\Program Files (x86)\Inno Setup 6"
+          $languagesDir = "$innoSetupPath\Languages"
+          Invoke-WebRequest -Uri "https://raw.githubusercontent.com/jrsoftware/issrc/refs/heads/main/Files/Languages/ChineseSimplified.isl" -OutFile "$languagesDir\ChineseSimplified.isl"
+          Invoke-WebRequest -Uri "https://raw.githubusercontent.com/jrsoftware/issrc/refs/heads/main/Files/Languages/ChineseTraditional.isl" -OutFile "$languagesDir\ChineseTraditional.isl"
           $iscc = "$innoSetupPath\iscc.exe"
           & $iscc setup\traynard.iss /DAppVersion=$env:VERSION /Qp
       - name: Upload portable artifact
