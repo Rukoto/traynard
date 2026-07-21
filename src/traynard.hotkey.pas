@@ -107,6 +107,7 @@ var
   Window: TWindow;
   Rule: TRule;
   HotkeyLauncherEntry: TLauncher.THotkeyEntry;
+  FoundOnDesktop: boolean;
 begin
   if HotkeyID >= Length(FHotkeys) then Exit;
 
@@ -120,10 +121,22 @@ begin
   begin
     for Rule in Rules.Filter(TheHotkey) do
     begin
+      FoundOnDesktop := False;
       for Window in WindowManager.Desktop do
       begin
         if Rules.Match(Window, Rule) then
+        begin
+          FoundOnDesktop := True;
           WindowManager.TryMinimizeWindow(Window.Handle, Rule.Position);
+        end;
+      end;
+      if not FoundOnDesktop then
+      begin
+        for Window in WindowManager.Tray do
+        begin
+          if Rules.Match(Window, Rule) then
+            WindowManager.TryRestoreWindow(Window.Handle);
+        end;
       end;
     end;
   end;
