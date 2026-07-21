@@ -32,7 +32,7 @@ jobs:
           $revision = Get-XmlValue("/CONFIG/ProjectOptions/VersionInfo/RevisionNr/@Value")
           $version = "$major.$minor.$revision"
           "VERSION=$version" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
-  
+
   build:
     needs: get-version
     env:
@@ -109,9 +109,6 @@ jobs:
         shell: pwsh
         run: |
           $innoSetupPath = "C:\Program Files (x86)\Inno Setup 6"
-          $languagesDir = "$innoSetupPath\Languages"
-          Invoke-WebRequest -Uri "https://raw.githubusercontent.com/jrsoftware/issrc/refs/heads/main/Files/Languages/Unofficial/ChineseSimplified.isl" -OutFile "$languagesDir\ChineseSimplified.isl"
-          Invoke-WebRequest -Uri "https://raw.githubusercontent.com/jrsoftware/issrc/refs/heads/main/Files/Languages/Unofficial/ChineseTraditional.isl" -OutFile "$languagesDir\ChineseTraditional.isl"
           $iscc = "$innoSetupPath\iscc.exe"
           & $iscc setup\traynard.iss /DAppVersion=$env:VERSION /Qp
       - name: Upload portable artifact
@@ -183,10 +180,10 @@ jobs:
           name: Traynard v${{ needs.build.outputs.VERSION }}
           body: |
             ## Downloads
-            
+
             1. Download the portable version if you want to run Traynard without installation. Just extract the ZIP file to any location and run traynard.exe. The user data will be saved in the same directory.
             2. Download the standalone version if you want a single executable file. Just run `traynard.exe`. The user data will be created in your user profile folder.
-            
+
             ## Changelog
           files: |
             dist/*
